@@ -6,10 +6,13 @@ function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
+    const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
     const handleLogin = async (e) => {
         e.preventDefault()
+        setLoading(true)
+        setError('')
         try {
             const res = await axios.post('https://my-first-application-ygu0.onrender.com/api/auth/login', {
                 email,
@@ -19,6 +22,8 @@ function Login() {
             navigate('/home')
         } catch (err) {
             setError('Invalid email or password')
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -78,17 +83,18 @@ function Login() {
                     )}
                     <button
                         type="submit"
+                        disabled={loading}
                         style={{
                             width: '100%',
                             padding: '10px',
-                            backgroundColor: '#4f46e5',
+                            backgroundColor: loading ? '#a5b4fc' : '#4f46e5',
                             color: 'white',
                             border: 'none',
                             borderRadius: '4px',
-                            cursor: 'pointer',
+                            cursor: loading ? 'not-allowed' : 'pointer',
                         }}
                     >
-                        Login
+                        {loading ? 'Logging in...' : 'Login'}
                     </button>
                 </form>
             </div>
